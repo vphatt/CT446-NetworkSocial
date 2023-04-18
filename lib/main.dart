@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Socical Network',
-          theme: ThemeData.light().copyWith(
+          theme: ThemeData(fontFamily: 'Futura').copyWith(
             scaffoldBackgroundColor: mobileBackgroundColor,
           ),
           // home: ResponsiveScreen(

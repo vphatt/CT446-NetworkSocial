@@ -255,6 +255,7 @@ class _PostBoxState extends State<PostBox> {
                             )}",
                             style: const TextStyle(
                                 color: secondaryColor,
+                                fontSize: 12,
                                 fontStyle: FontStyle.italic,
                                 fontWeight: FontWeight.bold)),
                       )),
