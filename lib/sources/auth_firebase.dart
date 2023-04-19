@@ -106,4 +106,9 @@ class AuthFirebase {
     }
     return res;
   }
+
+  //ĐĂNG XUẤT
+  Future<void> signOut() async {
+    await _auth.signOut();
+  }
 }

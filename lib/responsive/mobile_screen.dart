@@ -77,11 +77,11 @@ class _MobileScreenState extends State<MobileScreen> {
               title: const Text('Tìm Kiếm'),
               activeColor: themeColor,
               inactiveColor: primaryColor),
-          FlashyTabBarItem(
-              icon: const Icon(Icons.add_circle),
-              title: const Text('Bài Viết'),
-              activeColor: themeColor,
-              inactiveColor: primaryColor),
+          // FlashyTabBarItem(
+          //     icon: const Icon(Icons.add_circle),
+          //     title: const Text('Bài Viết'),
+          //     activeColor: themeColor,
+          //     inactiveColor: primaryColor),
           FlashyTabBarItem(
               icon: const Icon(Icons.notifications),
               title: const Text('Thông Báo'),

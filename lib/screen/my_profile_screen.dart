@@ -10,16 +10,20 @@ import 'package:socialnetwork/utils/tools.dart';
 import '../utils/colors.dart';
 import '../widgets/follow_button.dart';
 
-class ProfileScreen extends StatefulWidget {
-  final String uid;
-  const ProfileScreen({Key? key, required this.uid}) : super(key: key);
+class MyProfileScreen extends StatefulWidget {
+  //final String uid;
+  const MyProfileScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<MyProfileScreen> createState() => _MyProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _MyProfileScreenState extends State<MyProfileScreen> {
+  final String uid = FirebaseAuth.instance.currentUser!.uid;
   var userData = {};
+
   int postLength = 0;
   int followersLength = 0;
   int followingLength = 0;
@@ -36,14 +40,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       isLoading = true;
     });
     try {
-      var snap = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.uid)
-          .get();
+      var snap =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       var postSnap = await FirebaseFirestore.instance
           .collection('posts')
-          .where('uid', isEqualTo: widget.uid)
+          .where('uid', isEqualTo: uid)
           .get();
       userData = snap.data()!; //thông tin user
       postLength = postSnap.docs.length; //tổng số lượng ảnh
@@ -73,85 +75,79 @@ class _ProfileScreenState extends State<ProfileScreen> {
           )
         : Scaffold(
             appBar: AppBar(
-              systemOverlayStyle: const SystemUiOverlayStyle(
-                statusBarColor: mobileBackgroundColor,
-              ),
-              toolbarHeight: 70,
-              backgroundColor: Colors.white,
-              elevation: 0,
-              centerTitle: true,
-              actions: [
-                IconButton(
-                    onPressed: () async {
-                      showDialog(
-                        context: context,
-                        builder: ((context) {
-                          return SimpleDialog(
-                            title: const Text(
-                              'Bạn có chắc muốn đăng xuất?',
-                              style: TextStyle(color: primaryColor),
-                            ),
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  SimpleDialogOption(
-                                    child: const Text(
-                                      'Đăng xuất',
-                                      style: TextStyle(
-                                          color: themeColor, fontSize: 20),
+                systemOverlayStyle: const SystemUiOverlayStyle(
+                  statusBarColor: mobileBackgroundColor,
+                ),
+                toolbarHeight: 70,
+                backgroundColor: Colors.white,
+                elevation: 0,
+                centerTitle: true,
+                actions: [
+                  IconButton(
+                      onPressed: () async {
+                        showDialog(
+                          context: context,
+                          builder: ((context) {
+                            return SimpleDialog(
+                              title: const Text(
+                                'Bạn có chắc muốn đăng xuất?',
+                                style: TextStyle(color: primaryColor),
+                              ),
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    SimpleDialogOption(
+                                      child: const Text(
+                                        'Đăng xuất',
+                                        style: TextStyle(
+                                            color: themeColor, fontSize: 20),
+                                      ),
+                                      onPressed: () async {
+                                        await AuthFirebase().signOut();
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LoginScreen(),
+                                          ),
+                                        );
+                                      },
                                     ),
-                                    onPressed: () async {
-                                      await AuthFirebase().signOut();
-                                      Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LoginScreen(),
+                                    SimpleDialogOption(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text(
+                                        'Huỷ',
+                                        style: TextStyle(
+                                          color: secondaryColor,
+                                          fontSize: 20,
                                         ),
-                                      );
-                                    },
-                                  ),
-                                  SimpleDialogOption(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text(
-                                      'Huỷ',
-                                      style: TextStyle(
-                                        color: secondaryColor,
-                                        fontSize: 20,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          );
-                        }),
-                      );
-                      // await AuthFirebase().signOut();
-                      // Navigator.of(context).pushReplacement(
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const LoginScreen(),
-                      //   ),
-                      // );
-                    },
-                    icon: const Icon(
-                      Icons.logout,
-                      color: themeColor,
-                    ))
-              ],
-              iconTheme: const IconThemeData(color: primaryColor),
-              title: FirebaseAuth.instance.currentUser!.uid == widget.uid
-                  ? const Text(
-                      'Hồ Sơ Của Tôi',
-                      style: TextStyle(color: primaryColor, fontSize: 25),
-                    )
-                  : const Text(
-                      'Hồ Sơ',
-                      style: TextStyle(color: primaryColor, fontSize: 25),
-                    ),
-            ),
+                                  ],
+                                )
+                              ],
+                            );
+                          }),
+                        );
+                        // await AuthFirebase().signOut();
+                        // Navigator.of(context).pushReplacement(
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const LoginScreen(),
+                        //   ),
+                        // );
+                      },
+                      icon: const Icon(
+                        Icons.logout,
+                        color: themeColor,
+                      ))
+                ],
+                iconTheme: const IconThemeData(color: primaryColor),
+                title: const Text(
+                  'Hồ Sơ Của Tôi',
+                  style: TextStyle(color: primaryColor, fontSize: 25),
+                )),
             body: ListView(
               children: [
                 Padding(
@@ -221,46 +217,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    FirebaseAuth.instance.currentUser!.uid == widget.uid
-                        ? FollowButton(
-                            text: 'Chỉnh sửa hồ sơ',
-                            textColor: themeColor,
-                            backgroundColor: mobileBackgroundColor,
-                            borderColor: themeColor,
-                            function: () {},
-                          )
-                        : isFollowing
-                            ? FollowButton(
-                                text: 'Bỏ theo dõi',
-                                backgroundColor: mobileBackgroundColor,
-                                borderColor: primaryColor,
-                                textColor: primaryColor,
-                                function: () async {
-                                  await FirestoreFirebase().followUser(
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                      userData['uid']);
-                                  setState(() {
-                                    isFollowing = false;
-                                    followersLength--;
-                                  });
-                                },
-                              )
-                            : FollowButton(
-                                text: 'Theo dõi',
-                                backgroundColor: themeColor,
-                                borderColor: themeColor,
-                                textColor: mobileBackgroundColor,
-                                function: () async {
-                                  await FirestoreFirebase().followUser(
-                                    FirebaseAuth.instance.currentUser!.uid,
-                                    userData['uid'],
-                                  );
-                                  setState(() {
-                                    isFollowing = true;
-                                    followersLength++;
-                                  });
-                                },
-                              ),
+                    FollowButton(
+                      text: 'Chỉnh sửa hồ sơ',
+                      textColor: themeColor,
+                      backgroundColor: mobileBackgroundColor,
+                      borderColor: themeColor,
+                      function: () {},
+                    )
                   ],
                 ),
                 const Divider(),
@@ -269,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: FutureBuilder(
                     future: FirebaseFirestore.instance
                         .collection('posts')
-                        .where('uid', isEqualTo: widget.uid)
+                        .where('uid', isEqualTo: uid)
                         //.orderBy('datePublish', descending: true)
                         .get(),
                     builder: (context, snapshot) {
