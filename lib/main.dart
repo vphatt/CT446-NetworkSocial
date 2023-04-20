@@ -1,3 +1,4 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -50,9 +51,18 @@ class MyApp extends StatelessWidget {
             builder: ((context, snapshot) {
               if (snapshot.connectionState == ConnectionState.active) {
                 if (snapshot.hasData) {
-                  return const ResponsiveScreen(
-                      mobileScreenLayout: MobileScreen(),
-                      webScreenLayout: WebScreen());
+                  return ResponsiveScreen(
+                      mobileScreenLayout: AnimatedSplashScreen(
+                          splash: const Text(
+                            'Social Network',
+                            style: TextStyle(
+                                fontFamily: 'Nice',
+                                color: themeColor,
+                                fontSize: 40),
+                          ),
+                          splashTransition: SplashTransition.fadeTransition,
+                          nextScreen: const MobileScreen()),
+                      webScreenLayout: const WebScreen());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('${snapshot.error}'));
                 }
@@ -63,7 +73,14 @@ class MyApp extends StatelessWidget {
                   color: primaryColor,
                 ));
               }
-              return const LoginScreen();
+              return AnimatedSplashScreen(
+                  splash: const Text(
+                    'Social Network',
+                    style: TextStyle(
+                        fontFamily: 'Nice', color: themeColor, fontSize: 40),
+                  ),
+                  splashTransition: SplashTransition.fadeTransition,
+                  nextScreen: const LoginScreen());
             }),
           )),
     );

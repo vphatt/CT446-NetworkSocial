@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:socialnetwork/provider/user_provider.dart';
-import 'package:socialnetwork/screen/newsfeed_screen.dart';
+import 'package:socialnetwork/screen/notification_screen.dart';
 import 'package:socialnetwork/sources/firestore_firebase.dart';
 import 'package:socialnetwork/utils/colors.dart';
 import 'package:socialnetwork/utils/tools.dart';
@@ -58,9 +58,13 @@ class _NewsFeedState extends State<NewsFeed> {
               ),
               actions: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const NotificationScreen(),
+                          ),
+                        ),
                     icon: const Icon(
-                      Icons.messenger,
+                      Icons.notifications,
                       color: primaryColor,
                     )),
               ],
@@ -81,6 +85,7 @@ class _NewsFeedState extends State<NewsFeed> {
                 }
 
                 return ListView.builder(
+                  physics: const BouncingScrollPhysics(),
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: ((context, index) => PostBox(
                         snap: snapshot.data!.docs[index].data(),
@@ -183,6 +188,22 @@ class _NewsFeedState extends State<NewsFeed> {
                           image: DecorationImage(image: MemoryImage(_file!))),
                     ),
                   ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  height: 50,
+                  width: 100,
+                  decoration: BoxDecoration(
+                      color: themeColor,
+                      borderRadius: BorderRadius.circular(15)),
+                  child: TextButton(
+                      onPressed: () => _selectImage(context),
+                      child: const Text(
+                        'Đổi ảnh',
+                        style: TextStyle(color: mobileBackgroundColor),
+                      )),
                 )
               ],
             ),
@@ -270,12 +291,14 @@ class _NewsFeedState extends State<NewsFeed> {
         setState(() {
           _isLoading = false;
         });
+        // ignore: use_build_context_synchronously
         showSnackBar('Bài viết đã được đăng!', context);
         clearImage();
       } else {
         setState(() {
           _isLoading = false;
         });
+        // ignore: use_build_context_synchronously
         showSnackBar(res, context);
       }
     } catch (e) {

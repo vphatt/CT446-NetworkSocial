@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
+import 'package:socialnetwork/screen/edit_profile_screen.dart';
 import 'package:socialnetwork/screen/login_screen.dart';
 import 'package:socialnetwork/sources/auth_firebase.dart';
 import 'package:socialnetwork/sources/firestore_firebase.dart';
@@ -23,7 +24,7 @@ class MyProfileScreen extends StatefulWidget {
 class _MyProfileScreenState extends State<MyProfileScreen> {
   final String uid = FirebaseAuth.instance.currentUser!.uid;
   var userData = {};
-
+  int id = 0;
   int postLength = 0;
   int followersLength = 0;
   int followingLength = 0;
@@ -222,7 +223,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       textColor: themeColor,
                       backgroundColor: mobileBackgroundColor,
                       borderColor: themeColor,
-                      function: () {},
+                      function: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                EditProfileScreen(uid: userData['uid'])));
+                      },
                     )
                   ],
                 ),
@@ -244,6 +249,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         );
                       }
                       return GridView.builder(
+                          physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: (snapshot.data! as dynamic).docs.length,
                           gridDelegate:
@@ -270,4 +276,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               ],
             ));
   }
+
+  // void refreshData() {
+  //   id++;
+  // }
+
+  // onGoBack(dynamic value) {
+  //   refreshData();
+  //   setState(() {});
+  // }
+
+  // navigateEditProfileScreen(uid) {
+  //   Route route =
+  //       MaterialPageRoute(builder: (context) => EditProfileScreen(uid: uid));
+  //   Navigator.push(context, route).then(onGoBack);
+  // }
 }

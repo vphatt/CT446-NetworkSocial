@@ -70,10 +70,12 @@ class _SearchScreenState extends State<SearchScreen> {
                     itemBuilder: (context, index) {
                       return InkWell(
                           onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
+                                MaterialPageRoute(
                                   builder: (context) => ProfileScreen(
                                       uid: (snapshot.data! as dynamic)
-                                          .docs[index]['uid']))),
+                                          .docs[index]['uid']),
+                                ),
+                              ),
                           child: ListTile(
                             leading: CircleAvatar(
                               backgroundImage: NetworkImage(

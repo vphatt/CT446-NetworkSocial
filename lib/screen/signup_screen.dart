@@ -122,7 +122,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       onPressed: selectImage,
                       icon: const Icon(
                         Icons.add_a_photo,
-                        color: Colors.white,
+                        color: Colors.blue,
                         size: 30,
                       )),
                 )

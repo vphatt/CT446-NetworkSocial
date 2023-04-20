@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:socialnetwork/sources/storage_firebase.dart';
 import 'package:uuid/uuid.dart';
 
@@ -105,5 +106,28 @@ class FirestoreFirebase {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  //CHỈNH SỬA THÔNG TIN
+  Future<String> updateInfo(
+      String uid, String username, String name, Uint8List avt) async {
+    String res = "Đã có lỗi xảy ra!";
+    try {
+      // DocumentSnapshot snap =
+      //     await _firestore.collection('users').doc(uid).get();
+      // Reference avt =
+      //     FirebaseStorage.instance.ref().child('avatarProfile').child(uid);
+      String avtUrl = await StorageFirebase()
+          .uploadImageToStorage('avatarProfile', avt, false);
+
+      await _firestore
+          .collection('users')
+          .doc(uid)
+          .update({'username': username, 'name': name});
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
   }
 }

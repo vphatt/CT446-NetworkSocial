@@ -281,6 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         );
                       }
                       return GridView.builder(
+                          physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: (snapshot.data! as dynamic).docs.length,
                           gridDelegate:

@@ -12,6 +12,8 @@ import '../provider/user_provider.dart';
 
 import 'package:socialnetwork/models/user.dart' as model;
 
+import '../screen/profile_screen.dart';
+
 class PostBox extends StatefulWidget {
   final snap;
   const PostBox({
@@ -86,13 +88,22 @@ class _PostBoxState extends State<PostBox> {
         child: Column(
           children: [
             //Header của phần bài đăng
+
             Container(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10)
                   .copyWith(right: 0),
               child: Row(children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundImage: NetworkImage(widget.snap['avt']),
+                InkWell(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ProfileScreen(uid: widget.snap['uid']),
+                    ),
+                  ),
+                  child: CircleAvatar(
+                    radius: 25,
+                    backgroundImage: NetworkImage(widget.snap['avt']),
+                  ),
                 ),
                 Expanded(
                   child: Padding(
@@ -100,16 +111,32 @@ class _PostBoxState extends State<PostBox> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.snap['name'],
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: primaryColor)),
-                        Text(widget.snap['username'],
-                            style: const TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontSize: 15,
-                                color: Colors.grey)),
+                        InkWell(
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProfileScreen(uid: widget.snap['uid']),
+                            ),
+                          ),
+                          child: Text(widget.snap['name'],
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: primaryColor)),
+                        ),
+                        InkWell(
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProfileScreen(uid: widget.snap['uid']),
+                            ),
+                          ),
+                          child: Text(widget.snap['username'],
+                              style: const TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 15,
+                                  color: Colors.grey)),
+                        ),
                       ],
                     ),
                   ),

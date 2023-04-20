@@ -83,8 +83,8 @@ class _MobileScreenState extends State<MobileScreen> {
           //     activeColor: themeColor,
           //     inactiveColor: primaryColor),
           FlashyTabBarItem(
-              icon: const Icon(Icons.notifications),
-              title: const Text('Thông Báo'),
+              icon: const Icon(Icons.message),
+              title: const Text('Trò Chuyện'),
               activeColor: themeColor,
               inactiveColor: primaryColor),
           FlashyTabBarItem(
