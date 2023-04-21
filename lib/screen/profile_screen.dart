@@ -11,6 +11,7 @@ import 'package:socialnetwork/utils/tools.dart';
 import '../utils/colors.dart';
 import '../widgets/follow_button.dart';
 import '../widgets/list_follow_screen.dart';
+import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -220,7 +221,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             textColor: themeColor,
                             backgroundColor: mobileBackgroundColor,
                             borderColor: themeColor,
-                            function: () {},
+                            function: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditProfileScreen(uid: userData['uid'])));
+                            },
                           )
                         : isFollowing
                             ? isFriend
