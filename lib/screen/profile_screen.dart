@@ -9,6 +9,7 @@ import 'package:socialnetwork/utils/tools.dart';
 
 import '../utils/colors.dart';
 import '../widgets/follow_button.dart';
+import '../widgets/list_follow_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -187,14 +188,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           )),
-                      Text('$followersLength',
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ListFollowScreen(
+                                uid: userData['uid'],
+                                isFollower: true,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          '$followersLength',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold)),
-                      Text('$followingLength',
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: primaryColor),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ListFollowScreen(
+                                uid: userData['uid'],
+                                isFollower: false,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          '$followingLength',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold))
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: primaryColor),
+                        ),
+                      ),
                     ]),
                     const TableRow(children: [
                       Text(

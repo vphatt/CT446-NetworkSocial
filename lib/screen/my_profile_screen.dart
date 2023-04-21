@@ -7,6 +7,7 @@ import 'package:socialnetwork/screen/login_screen.dart';
 import 'package:socialnetwork/sources/auth_firebase.dart';
 import 'package:socialnetwork/sources/firestore_firebase.dart';
 import 'package:socialnetwork/utils/tools.dart';
+import 'package:socialnetwork/widgets/list_follow_screen.dart';
 
 import '../utils/colors.dart';
 import '../widgets/follow_button.dart';
@@ -184,14 +185,46 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           )),
-                      Text('$followersLength',
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ListFollowScreen(
+                                uid: uid,
+                                isFollower: true,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          '$followersLength',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold)),
-                      Text('$followingLength',
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: primaryColor),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ListFollowScreen(
+                                uid: uid,
+                                isFollower: false,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          '$followingLength',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold))
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: primaryColor),
+                        ),
+                      ),
                     ]),
                     const TableRow(children: [
                       Text(
