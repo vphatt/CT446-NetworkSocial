@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../screen/profile_screen.dart';
 import '../utils/colors.dart';
 
 class CommentCard extends StatelessWidget {
@@ -9,6 +11,10 @@ class CommentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String name = '';
+
+    //var userData = FirebaseFirestore.instance.collection('users').doc(snap['uid']).get();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Container(
@@ -16,7 +22,14 @@ class CommentCard extends StatelessWidget {
             border: Border(bottom: BorderSide(color: Colors.grey, width: 1))),
         child: ListTile(
             leading: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileScreen(uid: snap.data()['uid']),
+                  ),
+                );
+              },
               child: Container(
                 height: 50,
                 width: 50,
@@ -39,10 +52,9 @@ class CommentCard extends StatelessWidget {
                     fontWeight: FontWeight.bold, color: primaryColor),
               ),
               TextSpan(
-                text: '\t\t' +
-                    DateFormat('dd/MM/yyyy - HH:mm').format(
-                      snap['datePublish'].toDate(),
-                    ),
+                text: '\t\t${DateFormat('dd/MM/yyyy - HH:mm').format(
+                  snap['datePublish'].toDate(),
+                )}',
                 style: const TextStyle(
                     fontStyle: FontStyle.italic,
                     color: Colors.grey,

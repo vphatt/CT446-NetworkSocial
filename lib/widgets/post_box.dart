@@ -34,6 +34,11 @@ class _PostBoxState extends State<PostBox> {
   List list = [];
   int commentLength = 0;
   bool myPost = false;
+  bool isLoading = false;
+
+  var userData = {};
+  String name = '';
+  String username = '';
 
   @override
   void initState() {
@@ -41,6 +46,8 @@ class _PostBoxState extends State<PostBox> {
 
     uid = FirebaseAuth.instance.currentUser!.uid;
     postId = widget.snap['postId'];
+
+    //userData = getInfo.data()!;
 
     list = widget.snap['like'];
 
@@ -55,18 +62,30 @@ class _PostBoxState extends State<PostBox> {
   }
 
   void getCommentLength() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       QuerySnapshot snap = await FirebaseFirestore.instance
           .collection('posts')
           .doc(widget.snap['postId'])
           .collection('comments')
           .get();
+
+      var getInfo = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.snap['uid'])
+          .get();
+      userData = getInfo.data()!;
+      name = userData['name'];
+      username = userData['username'];
       commentLength = snap.docs.length;
     } catch (e) {
       print(e.toString());
     }
     setState(() {
       //getCommentLength();
+      isLoading = false;
     });
   }
 
@@ -118,7 +137,7 @@ class _PostBoxState extends State<PostBox> {
                                   ProfileScreen(uid: widget.snap['uid']),
                             ),
                           ),
-                          child: Text(widget.snap['name'],
+                          child: Text(name,
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
@@ -131,7 +150,7 @@ class _PostBoxState extends State<PostBox> {
                                   ProfileScreen(uid: widget.snap['uid']),
                             ),
                           ),
-                          child: Text(widget.snap['username'],
+                          child: Text(username,
                               style: const TextStyle(
                                   fontStyle: FontStyle.italic,
                                   fontSize: 15,

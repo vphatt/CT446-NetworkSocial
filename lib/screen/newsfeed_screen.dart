@@ -46,15 +46,17 @@ class _NewsFeedState extends State<NewsFeed> {
             ),
             appBar: AppBar(
               systemOverlayStyle: const SystemUiOverlayStyle(
-                statusBarColor: mobileBackgroundColor,
+                statusBarColor: themeColor,
               ),
               toolbarHeight: 70,
-              backgroundColor: Colors.white,
+              backgroundColor: themeColor,
               elevation: 0,
               title: const Text(
                 'Social Network',
                 style: TextStyle(
-                    fontFamily: 'Nice', color: themeColor, fontSize: 40),
+                    fontFamily: 'Nice',
+                    color: mobileBackgroundColor,
+                    fontSize: 40),
               ),
               actions: [
                 IconButton(

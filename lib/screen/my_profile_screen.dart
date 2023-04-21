@@ -4,10 +4,12 @@ import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
 import 'package:socialnetwork/screen/edit_profile_screen.dart';
 import 'package:socialnetwork/screen/login_screen.dart';
+import 'package:socialnetwork/screen/post_detail_screen.dart';
 import 'package:socialnetwork/sources/auth_firebase.dart';
 import 'package:socialnetwork/sources/firestore_firebase.dart';
 import 'package:socialnetwork/utils/tools.dart';
 import 'package:socialnetwork/widgets/list_follow_screen.dart';
+import 'package:socialnetwork/widgets/post_box.dart';
 
 import '../utils/colors.dart';
 import '../widgets/follow_button.dart';
@@ -31,6 +33,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   int followingLength = 0;
   bool isFollowing = false;
   bool isLoading = false;
+  String name = '';
+  String username = '';
   @override
   void initState() {
     super.initState();
@@ -50,6 +54,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           .where('uid', isEqualTo: uid)
           .get();
       userData = snap.data()!; //thông tin user
+      name = userData['name'];
+      username = userData['username'];
       postLength = postSnap.docs.length; //tổng số lượng ảnh
       followersLength = userData['follower'].length; //tổng số người theo dõi
       followingLength =
@@ -78,10 +84,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         : Scaffold(
             appBar: AppBar(
                 systemOverlayStyle: const SystemUiOverlayStyle(
-                  statusBarColor: mobileBackgroundColor,
+                  statusBarColor: themeColor,
                 ),
                 toolbarHeight: 70,
-                backgroundColor: Colors.white,
+                backgroundColor: themeColor,
                 elevation: 0,
                 centerTitle: true,
                 actions: [
@@ -142,13 +148,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       },
                       icon: const Icon(
                         Icons.logout,
-                        color: themeColor,
+                        color: mobileBackgroundColor,
                       ))
                 ],
                 iconTheme: const IconThemeData(color: primaryColor),
                 title: const Text(
                   'Hồ Sơ Của Tôi',
-                  style: TextStyle(color: primaryColor, fontSize: 25),
+                  style: TextStyle(color: mobileBackgroundColor, fontSize: 25),
                 )),
             body: ListView(
               children: [
@@ -163,13 +169,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
                         child: Text(
-                          userData['name'],
+                          name,
                           style: const TextStyle(
                               fontSize: 25, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Text(
-                        userData['username'],
+                        username,
                         style:
                             const TextStyle(color: Colors.grey, fontSize: 20),
                       )
@@ -296,7 +302,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             DocumentSnapshot snap =
                                 (snapshot.data! as dynamic).docs[index];
 
-                            return Container(
+                            return InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        PostDetailScreen(snap: snap),
+                                  ),
+                                );
+                              }, //truyền snap
                               child: Image(
                                 image: NetworkImage(snap['postUrl']),
                                 fit: BoxFit.cover,
@@ -309,19 +323,4 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               ],
             ));
   }
-
-  // void refreshData() {
-  //   id++;
-  // }
-
-  // onGoBack(dynamic value) {
-  //   refreshData();
-  //   setState(() {});
-  // }
-
-  // navigateEditProfileScreen(uid) {
-  //   Route route =
-  //       MaterialPageRoute(builder: (context) => EditProfileScreen(uid: uid));
-  //   Navigator.push(context, route).then(onGoBack);
-  // }
 }

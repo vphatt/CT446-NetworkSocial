@@ -64,20 +64,20 @@ class _ListFollowScreenState extends State<ListFollowScreen> {
             // backgroundColor: Color.fromARGB(255, 233, 233, 233),
             appBar: AppBar(
                 systemOverlayStyle: const SystemUiOverlayStyle(
-                  statusBarColor: mobileBackgroundColor,
+                  statusBarColor: themeColor,
                 ),
                 toolbarHeight: 70,
-                backgroundColor: Colors.white,
+                backgroundColor: themeColor,
                 elevation: 0,
-                iconTheme: const IconThemeData(color: primaryColor),
+                iconTheme: const IconThemeData(color: mobileBackgroundColor),
                 title: widget.isFollower
                     ? Text(
                         'Người theo dõi ${userData['name']}',
-                        style: const TextStyle(color: primaryColor),
+                        style: const TextStyle(color: mobileBackgroundColor),
                       )
                     : Text(
                         'Người ${userData['name']} đang theo dõi',
-                        style: const TextStyle(color: primaryColor),
+                        style: const TextStyle(color: mobileBackgroundColor),
                       )),
             body: widget.isFollower
                 ? ListView.builder(

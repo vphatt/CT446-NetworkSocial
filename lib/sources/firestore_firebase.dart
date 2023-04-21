@@ -110,20 +110,30 @@ class FirestoreFirebase {
 
   //CHỈNH SỬA THÔNG TIN
   Future<String> updateInfo(
-      String uid, String username, String name, Uint8List avt) async {
+      String uid, String username, String name, dynamic avt) async {
     String res = "Đã có lỗi xảy ra!";
     try {
       // DocumentSnapshot snap =
       //     await _firestore.collection('users').doc(uid).get();
       // Reference avt =
       //     FirebaseStorage.instance.ref().child('avatarProfile').child(uid);
-      String avtUrl = await StorageFirebase()
-          .uploadImageToStorage('avatarProfile', avt, false);
+      if (avt == Uint8List) {
+        String avtUrl = await StorageFirebase()
+            .uploadImageToStorage('avatarProfile', avt, false);
 
-      await _firestore
-          .collection('users')
-          .doc(uid)
-          .update({'username': username, 'name': name});
+        await _firestore
+            .collection('users')
+            .doc(uid)
+            .update({'username': username, 'name': name});
+      } else {
+        await _firestore
+            .collection('users')
+            .doc(uid)
+            .update({'username': username, 'name': name});
+      }
+
+      //await _firestore.collection('posts').where('uid', isEqualTo: uid)
+      // Post post =
       res = 'success';
     } catch (err) {
       res = err.toString();

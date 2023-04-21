@@ -187,7 +187,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               userData['uid'],
                               _usernameController.text,
                               _nameController.text,
-                              _image!),
+                              _image != null ? _image! : userData['avtUrl']),
                           // async {
                           //   await
                           //   FirestoreFirebase().updateInfo(
@@ -229,8 +229,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           );
   }
 
-  void updateUser(
-      String uid, String username, String name, Uint8List avt) async {
+  void updateUser(String uid, String username, String name, dynamic avt) async {
     setState(() {
       _isLoading = true;
     });
