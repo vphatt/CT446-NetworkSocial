@@ -19,6 +19,7 @@ class ChatUserCard extends StatefulWidget {
 
 class _ChatUserCardState extends State<ChatUserCard> {
   Message? _message;
+  Message? _message3;
 
   // int count = 0;
   // var getMes = {};
@@ -55,43 +56,55 @@ class _ChatUserCardState extends State<ChatUserCard> {
       child: Card(
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ChatScreen(snap: widget.snap),
-              ),
-            );
-          },
-          child: StreamBuilder(
-            stream: FirestoreFirebase().getLastMessage(widget.snap['uid']),
-            builder: ((context,
-                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-              final data = snapshot.data?.docs;
+        child: StreamBuilder(
+          stream: FirestoreFirebase().getLastMessage(widget.snap['uid']),
+          builder: ((context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+            final data = snapshot.data?.docs;
 
-              final list =
-                  data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
+            final list =
+                data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
 
-              // final listUnRead =
-              //     unRead.map((e) => Message.fromJson(e.data())).toList();
-              if (list.isNotEmpty) _message = list[0];
+            // final listUnRead =
+            //     unRead.map((e) => Message.fromJson(e.data())).toList();
+            if (list.isNotEmpty) _message = list[0];
 
-              return StreamBuilder(
-                  stream:
-                      FirestoreFirebase().getNumberUnread(widget.snap['uid']),
+            return StreamBuilder(
+              stream: FirestoreFirebase().getNumberUnread(widget.snap['uid']),
+              builder: ((context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                      snapshot2) {
+                final data2 = snapshot2.data?.docs;
+
+                final list2 =
+                    data2?.map((e) => Message.fromJson(e.data())).toList() ??
+                        [];
+
+                int count = list2.length;
+                return StreamBuilder(
+                  stream: FirestoreFirebase()
+                      .getLastSendMessage(widget.snap['uid']),
                   builder: ((context,
                       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                          snapshot2) {
-                    final data2 = snapshot2.data?.docs;
-
-                    final list2 = data2
+                          snapshot3) {
+                    final data3 = snapshot3.data?.docs;
+                    final list3 = data3
                             ?.map((e) => Message.fromJson(e.data()))
                             .toList() ??
                         [];
+                    if (list3.isNotEmpty) _message3 = list[0];
 
-                    int count = list2.length;
                     return _message != null
                         ? ListTile(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ChatScreen(
+                                      snap: widget.snap,
+                                      lastSendMessage: _message3),
+                                ),
+                              );
+                            },
                             leading: CircleAvatar(
                                 radius: 30,
                                 backgroundImage:
@@ -177,33 +190,35 @@ class _ChatUserCardState extends State<ChatUserCard> {
                                   ),
                           )
                         : const SizedBox();
-                  }));
-            }),
-          ),
-
-          // ListTile(
-          //   leading: CircleAvatar(
-          //       radius: 30,
-          //       backgroundImage: NetworkImage(widget.snap['avtUrl'])),
-          //   title: FirebaseAuth.instance.currentUser!.uid != widget.snap['uid']
-          //       ? Text('${widget.snap['name']}')
-          //       : const Text(
-          //           'Tôi',
-          //           style: TextStyle(
-          //               color: Color.fromARGB(255, 38, 115, 177),
-          //               fontStyle: FontStyle.italic,
-          //               fontWeight: FontWeight.bold),
-          //         ),
-          //   subtitle: Text(
-          //     '${widget.message}',
-          //     maxLines: 1,
-          //   ),
-          //   trailing: Text(
-          //     '10:30',
-          //     style: TextStyle(color: secondaryColor),
-          //   ),
-          // ),
+                  }),
+                );
+              }),
+            );
+          }),
         ),
+
+        // ListTile(
+        //   leading: CircleAvatar(
+        //       radius: 30,
+        //       backgroundImage: NetworkImage(widget.snap['avtUrl'])),
+        //   title: FirebaseAuth.instance.currentUser!.uid != widget.snap['uid']
+        //       ? Text('${widget.snap['name']}')
+        //       : const Text(
+        //           'Tôi',
+        //           style: TextStyle(
+        //               color: Color.fromARGB(255, 38, 115, 177),
+        //               fontStyle: FontStyle.italic,
+        //               fontWeight: FontWeight.bold),
+        //         ),
+        //   subtitle: Text(
+        //     '${widget.message}',
+        //     maxLines: 1,
+        //   ),
+        //   trailing: Text(
+        //     '10:30',
+        //     style: TextStyle(color: secondaryColor),
+        //   ),
+        // ),
       ),
     );
   }

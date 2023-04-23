@@ -11,7 +11,12 @@ import '../models/message.dart';
 class MessageCard extends StatefulWidget {
   final message;
   final snap;
-  const MessageCard({Key? key, required this.message, this.snap})
+  final Message lastSendMessage;
+  const MessageCard(
+      {Key? key,
+      required this.message,
+      this.snap,
+      required this.lastSendMessage})
       : super(key: key);
 
   @override
@@ -80,6 +85,7 @@ class _MessageCardState extends State<MessageCard> {
                     style: const TextStyle(color: Colors.white, fontSize: 15),
                   ),
                 ),
+                // if (widget.message['msgId'] == widget.lastSendMessage.msgId)
                 Container(
                   margin: const EdgeInsets.only(right: 10),
                   child: widget.message['read'].isNotEmpty

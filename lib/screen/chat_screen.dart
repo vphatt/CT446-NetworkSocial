@@ -12,7 +12,9 @@ import '../models/message.dart';
 
 class ChatScreen extends StatefulWidget {
   final snap;
-  const ChatScreen({Key? key, required this.snap}) : super(key: key);
+  final lastSendMessage;
+  const ChatScreen({Key? key, required this.snap, this.lastSendMessage})
+      : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -174,7 +176,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           itemBuilder: (context, index) {
                             return MessageCard(
                                 snap: widget.snap,
-                                message: snapshot.data!.docs[index].data());
+                                message: snapshot.data!.docs[index].data(),
+                                lastSendMessage: widget.lastSendMessage);
                           },
                         );
                 }),
