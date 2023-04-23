@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:socialnetwork/screen/chat_screen.dart';
 import 'package:socialnetwork/utils/colors.dart';
 
 class ChatUserCard extends StatefulWidget {
   final snap;
-  const ChatUserCard({Key? key, required this.snap}) : super(key: key);
+  final message;
+  const ChatUserCard({Key? key, required this.snap, this.message})
+      : super(key: key);
 
   @override
   State<ChatUserCard> createState() => _ChatUserCardState();
@@ -20,7 +23,10 @@ class _ChatUserCardState extends State<ChatUserCard> {
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ChatScreen(snap: widget.snap)));
+            },
             child: ListTile(
               leading: CircleAvatar(
                   radius: 30,
@@ -36,7 +42,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                               fontWeight: FontWeight.bold),
                         ),
               subtitle: Text(
-                'Tin nhắn cuối',
+                '${widget.message}',
                 maxLines: 1,
               ),
               trailing: Text(

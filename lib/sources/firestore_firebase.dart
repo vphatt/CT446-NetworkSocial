@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:socialnetwork/models/message.dart';
 import 'package:socialnetwork/sources/storage_firebase.dart';
 import 'package:uuid/uuid.dart';
 
@@ -10,6 +12,7 @@ import '../models/post.dart';
 
 class FirestoreFirebase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //ĐĂNG ẢNH
   Future<String> uploadPost(String caption, Uint8List file, String uid,
@@ -134,6 +137,49 @@ class FirestoreFirebase {
 
       //await _firestore.collection('posts').where('uid', isEqualTo: uid)
       // Post post =
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+  //LẤY TOÀN BỘ TIN NHẮN
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(String uid) {
+    return _firestore
+        .collection('chats')
+        .doc(FirestoreFirebase().getDocumentId(uid))
+        .collection('messages')
+        .orderBy('sent', descending: false)
+        .snapshots();
+  }
+
+  //TẠO ID DOCUMENT CỦA COLLECTION "CHAT"
+  String getDocumentId(String id) =>
+      FirebaseAuth.instance.currentUser!.uid.hashCode <= id.hashCode
+          ? '${FirebaseAuth.instance.currentUser!.uid}_$id'
+          : '${id}_${FirebaseAuth.instance.currentUser!.uid}';
+
+  //GỬI TIN NHẮN
+  Future<String> sendMessage(String uid, String recId, String msg) async {
+    String res = "Đã có lỗi xảy ra!";
+    try {
+      String msgId = const Uuid().v1();
+      Message message = Message(
+          msgId: msgId,
+          fromId: uid,
+          toId: recId,
+          msg: msg,
+          read: '',
+          sent: DateTime.now(),
+          type: Type.text);
+
+      _firestore
+          .collection('chats')
+          .doc(getDocumentId(recId))
+          .collection('messages')
+          .doc(msgId)
+          .set(message.toJson());
       res = 'success';
     } catch (err) {
       res = err.toString();

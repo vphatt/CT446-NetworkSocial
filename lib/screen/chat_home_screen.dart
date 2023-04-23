@@ -49,11 +49,18 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
               ),
             );
           }
+
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             physics: const BouncingScrollPhysics(),
-            itemBuilder: ((context, index) =>
-                    ChatUserCard(snap: snapshot.data!.docs[index].data())
+            itemBuilder: ((context, index) {
+              // final List lastMessage = FirestoreFirebase()
+              //     .getAllMessages(snapshot.data!.docs[index].data()['uid']);
+
+              return ChatUserCard(
+                  snap: snapshot.data!.docs[index].data(),
+                  message: 'tin nhắn cuối');
+            }
                 // {
                 //   return
                 //   Padding(
