@@ -150,7 +150,7 @@ class FirestoreFirebase {
         .collection('chats')
         .doc(FirestoreFirebase().getDocumentId(uid))
         .collection('messages')
-        .orderBy('sent', descending: false)
+        .orderBy('sent', descending: true)
         .snapshots();
   }
 
@@ -165,13 +165,14 @@ class FirestoreFirebase {
     String res = "Đã có lỗi xảy ra!";
     try {
       String msgId = const Uuid().v1();
+      final time = DateTime.now().millisecondsSinceEpoch.toString();
       Message message = Message(
           msgId: msgId,
           fromId: uid,
           toId: recId,
           msg: msg,
           read: '',
-          sent: DateTime.now(),
+          sent: time,
           type: Type.text);
 
       _firestore
@@ -185,5 +186,18 @@ class FirestoreFirebase {
       res = err.toString();
     }
     return res;
+  }
+
+  //CẬP NHẬT TRẠNG THÁI ĐÃ XEM CỦA TIN NHẮN GỬI ĐI
+  Future<void> updateReadStatus(String id, String msgId) async {
+    final time = DateTime.now().millisecondsSinceEpoch.toString();
+    _firestore
+        .collection('chats')
+        .doc(getDocumentId(id))
+        .collection('messages')
+        .doc(msgId)
+        .update({
+      'read': time,
+    });
   }
 }

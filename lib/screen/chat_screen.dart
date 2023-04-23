@@ -232,7 +232,6 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           MaterialButton(
             onPressed: () {
-              _scrollToBottom();
               if (_messageController.text.isNotEmpty) {
                 FirestoreFirebase().sendMessage(
                     FirebaseAuth.instance.currentUser!.uid,
@@ -240,6 +239,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     _messageController.text);
                 _messageController.text = '';
               }
+              _scrollToBottom();
             },
             shape: const CircleBorder(),
             height: 50,

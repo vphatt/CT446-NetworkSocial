@@ -7,7 +7,7 @@ class Message {
   final String toId;
   final String msg;
   final String read;
-  final sent;
+  final String sent;
   final Type type;
 
   const Message({
