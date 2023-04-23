@@ -58,8 +58,8 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
               //     .getAllMessages(snapshot.data!.docs[index].data()['uid']);
 
               return ChatUserCard(
-                  snap: snapshot.data!.docs[index].data(),
-                  message: 'tin nhắn cuối');
+                snap: snapshot.data!.docs[index].data(),
+              );
             }
                 // {
                 //   return

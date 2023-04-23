@@ -2,15 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:flutter/cupertino.dart';
 
 class Message {
-  final String msgId;
-  final String fromId;
-  final String toId;
-  final String msg;
-  final String read;
-  final String sent;
-  final Type type;
+  late final String msgId;
+  late final String fromId;
+  late final String toId;
+  late final String msg;
+  late final String read;
+  late final String sent;
+  late final Type type;
 
-  const Message({
+  Message({
     required this.msgId,
     required this.fromId,
     required this.toId,
@@ -30,18 +30,16 @@ class Message {
         'type': type.name,
       };
 
-  static Message fromSnap(DocumentSnapshot snap) {
-    var snapshot = snap.data() as Map<String, dynamic>;
+  Message.fromJson(Map<String, dynamic> snapshot) {
+    //var snapshot = snap.data() as Map<String, dynamic>;
 
-    return Message(
-      msgId: snapshot['msgId'],
-      fromId: snapshot['fromId'],
-      toId: snapshot['toId'],
-      msg: snapshot['msg'],
-      read: snapshot['read'],
-      sent: snapshot['sent'],
-      type: snapshot['type'] == Type.image.name ? Type.image : Type.text,
-    );
+    msgId = snapshot['msgId'].toString();
+    fromId = snapshot['fromId'].toString();
+    toId = snapshot['toId'].toString();
+    msg = snapshot['msg'].toString();
+    read = snapshot['read'].toString();
+    sent = snapshot['sent'].toString();
+    type = snapshot['type'] == Type.image.name ? Type.image : Type.text;
   }
 }
 

@@ -19,26 +19,6 @@ class MessageCard extends StatefulWidget {
 }
 
 class _MessageCardState extends State<MessageCard> {
-  String readLength = '';
-
-  @override
-  void initState() {
-    super.initState();
-    getLength();
-  }
-
-  getLength() async {
-    try {
-      var read = widget.message['read'].toString();
-      readLength = read;
-    } catch (e) {
-      print(e.toString());
-    }
-    setState(() {
-      //print(readLength);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return FirebaseAuth.instance.currentUser!.uid == widget.message['fromId']
@@ -48,59 +28,83 @@ class _MessageCardState extends State<MessageCard> {
 
   //Tin nhắn gửi đi
   Widget _messageSend() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const SizedBox(
-          width: 200,
-        ),
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(15),
-                margin: const EdgeInsets.only(top: 20, right: 10),
-                decoration: const BoxDecoration(
-                  color: messageSendColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(5),
+    return GestureDetector(
+      onLongPress: () {
+        showDialog(
+          context: context,
+          builder: ((context) {
+            return SimpleDialog(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Text(
+                          'Đã gửi ${MyDate.formatDateWithDDMMYYYY(context: context, time: widget.message['sent'])} lúc ${MyDate.formatDate(context: context, time: widget.message['sent'])}'),
+                      widget.message['read'].isNotEmpty
+                          ? Text(
+                              'Đã xem ${MyDate.formatDateWithDDMMYYYY(context: context, time: widget.message['read'])} lúc ${MyDate.formatDate(context: context, time: widget.message['read'])}')
+                          : const Text('Chưa xem'),
+                    ],
                   ),
-                ),
-                child: Text(
-                  widget.message['msg'],
-                  style: const TextStyle(color: Colors.white, fontSize: 15),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  widget.message['read'].isNotEmpty
-                      ? const Icon(
-                          Icons.done_all_outlined,
-                          color: Colors.blue,
-                          size: 20,
-                        )
-                      : const SizedBox(),
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: Text(
-                      MyDate.formatDate(
-                        context: context,
-                        time: widget.message['sent'],
-                      ),
-                      style: const TextStyle(color: Colors.grey, fontSize: 12),
+                )
+              ],
+            );
+          }),
+        );
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox(
+            width: 200,
+          ),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(15),
+                  margin: const EdgeInsets.only(top: 20, right: 10),
+                  decoration: const BoxDecoration(
+                    color: messageSendColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(5),
                     ),
                   ),
-                ],
-              ),
-            ],
+                  child: Text(
+                    widget.message['msg'],
+                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: widget.message['read'].isNotEmpty
+                      ? Text(
+                          'Đã xem ${MyDate.formatDate(
+                            context: context,
+                            time: widget.message['read'],
+                          )}',
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 12),
+                        )
+                      : Text(
+                          'Đã gửi ${MyDate.formatDate(
+                            context: context,
+                            time: widget.message['sent'],
+                          )}',
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -112,46 +116,66 @@ class _MessageCardState extends State<MessageCard> {
           .updateReadStatus(widget.snap['uid'], widget.message['msgId']);
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(15),
-                margin: const EdgeInsets.only(top: 20, left: 10),
-                decoration: const BoxDecoration(
-                  color: messageReceiveColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(5)),
-                ),
-                child: Text(
-                  widget.message['msg'],
-                  style: const TextStyle(color: Colors.black, fontSize: 15),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 10),
-                child: Text(
-                  MyDate.formatDate(
-                    context: context,
-                    time: widget.message['sent'],
+    return GestureDetector(
+      onLongPress: () {
+        showDialog(
+          context: context,
+          builder: ((context) {
+            return SimpleDialog(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                        'Đã nhận ${MyDate.formatDateWithDDMMYYYY(context: context, time: widget.message['sent'])} lúc ${MyDate.formatDate(context: context, time: widget.message['sent'])}'),
                   ),
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                )
+              ],
+            );
+          }),
+        );
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(15),
+                  margin: const EdgeInsets.only(top: 20, left: 10),
+                  decoration: const BoxDecoration(
+                    color: messageReceiveColor,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                        bottomLeft: Radius.circular(5)),
+                  ),
+                  child: Text(
+                    widget.message['msg'],
+                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                  ),
                 ),
-              ),
-            ],
+                Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    MyDate.formatDate(
+                      context: context,
+                      time: widget.message['sent'],
+                    ),
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        const SizedBox(
-          width: 200,
-        ),
-      ],
+          const SizedBox(
+            width: 200,
+          ),
+        ],
+      ),
     );
   }
 }

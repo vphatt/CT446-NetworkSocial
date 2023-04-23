@@ -200,4 +200,26 @@ class FirestoreFirebase {
       'read': time,
     });
   }
+
+  //LẤY TIN NHẮN CUỐI CÙNG VÀ THỜI GIAN CỦA TIN NHẮN CUỐI DÙNG
+  Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessage(String uid) {
+    return _firestore
+        .collection('chats')
+        .doc(FirestoreFirebase().getDocumentId(uid))
+        .collection('messages')
+        .orderBy('sent', descending: true)
+        .limit(1)
+        .snapshots();
+  }
+
+  //LẤY CÁC TIN NHẮN CHƯA ĐỌC
+  Stream<QuerySnapshot<Map<String, dynamic>>> getNumberUnread(String uid) {
+    return _firestore
+        .collection('chats')
+        .doc(FirestoreFirebase().getDocumentId(uid))
+        .collection('messages')
+        .where('read', isEqualTo: "")
+        .where('toId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .snapshots();
+  }
 }

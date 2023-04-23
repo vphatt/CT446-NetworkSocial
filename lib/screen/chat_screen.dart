@@ -163,7 +163,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
                   return snapshot.data!.docs.isEmpty
                       ? Center(
-                          child: Text('Hello ${widget.snap['name']}'),
+                          child: _helloButton(
+                              widget.snap['uid'], widget.snap['name']),
                         )
                       : ListView.builder(
                           controller: _scrollController,
@@ -247,6 +248,38 @@ class _ChatScreenState extends State<ChatScreen> {
             child: const Icon(
               Icons.send,
               color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _helloButton(String uid, String name) {
+    return InkWell(
+      onTap: () {
+        FirestoreFirebase().sendMessage(FirebaseAuth.instance.currentUser!.uid,
+            widget.snap['uid'], 'Hello 👋');
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            child: Container(
+              height: 80,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Hello '),
+                    Text(name),
+                    const Text(' 👋')
+                  ],
+                ),
+              ),
             ),
           ),
         ],
