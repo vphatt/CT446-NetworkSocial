@@ -54,46 +54,10 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
             itemCount: snapshot.data!.docs.length,
             physics: const BouncingScrollPhysics(),
             itemBuilder: ((context, index) {
-              // final List lastMessage = FirestoreFirebase()
-              //     .getAllMessages(snapshot.data!.docs[index].data()['uid']);
-
               return ChatUserCard(
                 snap: snapshot.data!.docs[index].data(),
               );
-            }
-                // {
-                //   return
-                //   Padding(
-                //     padding:
-                //         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                //     child: Card(
-                //       elevation: 2,
-                //       shape: RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.circular(15)),
-                //       child: InkWell(
-                //           onTap: () {},
-                //           child:
-                //           ListTile(
-                //             leading: CircleAvatar(
-                //                 radius: 30,
-                //                 backgroundImage: NetworkImage(
-                //                     snapshot.data!.docs[index].data()['avtUrl'])),
-                //             title: Text(
-                //                 '${snapshot.data!.docs[index].data()['name']}'),
-                //             subtitle: Text(
-                //               'Tin nhắn cuối',
-                //               maxLines: 1,
-                //             ),
-                //             trailing: Text(
-                //               '10:30',
-                //               style: TextStyle(color: secondaryColor),
-                //             ),
-                //           ),
-                //           ),
-                //     ),
-                //   );
-                // }
-                ),
+            }),
           );
         }),
       ),

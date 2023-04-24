@@ -201,24 +201,13 @@ class FirestoreFirebase {
     });
   }
 
-  //LẤY TIN NHẮN CUỐI CÙNG VÀ THỜI GIAN CỦA TIN NHẮN CUỐI DÙNG
+  //LẤY TIN NHẮN CUỐI CÙNG
   Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessage(String uid) {
     return _firestore
         .collection('chats')
         .doc(FirestoreFirebase().getDocumentId(uid))
         .collection('messages')
         .orderBy('sent', descending: true)
-        .limit(1)
-        .snapshots();
-  }
-
-  //LẤY TIN NHẮN GỬI ĐI CUỐI CÙNG
-  Stream<QuerySnapshot<Map<String, dynamic>>> getLastSendMessage(String uid) {
-    return _firestore
-        .collection('chats')
-        .doc(FirestoreFirebase().getDocumentId(uid))
-        .collection('messages')
-        .where('fromId', isEqualTo: uid)
         .limit(1)
         .snapshots();
   }

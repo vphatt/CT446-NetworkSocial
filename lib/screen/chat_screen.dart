@@ -1,14 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:socialnetwork/screen/profile_screen.dart';
 import 'package:socialnetwork/sources/firestore_firebase.dart';
 import 'package:socialnetwork/utils/colors.dart';
 import 'package:socialnetwork/widgets/message_card.dart';
-
-import '../models/message.dart';
 
 class ChatScreen extends StatefulWidget {
   final snap;
@@ -23,6 +23,9 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   //bool _isLoading = false;
   //List<Message> _list = [];
+
+  //Giá trị true hoặc false để xác định hiện hoặc ẩn emoji
+  bool _showEmoji = false;
 
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -69,122 +72,126 @@ class _ChatScreenState extends State<ChatScreen> {
         FocusScope.of(context).unfocus();
         //_scrollDown();
       },
-      child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 236, 236, 236),
-        // appBar: AppBar(
-        //   leading: CircleAvatar(
-        //       radius: 30, backgroundImage: NetworkImage(widget.snap['avtUrl'])),
-        // ),
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.call,
-                color: Colors.green,
+      child: WillPopScope(
+        onWillPop: () {
+          if (_showEmoji) {
+            setState(() {
+              _showEmoji = !_showEmoji;
+            });
+            return Future.value(false);
+          } else {
+            return Future.value(true);
+          }
+        },
+        child: Scaffold(
+          backgroundColor: const Color.fromARGB(255, 236, 236, 236),
+          // appBar: AppBar(
+          //   leading: CircleAvatar(
+          //       radius: 30, backgroundImage: NetworkImage(widget.snap['avtUrl'])),
+          // ),
+          appBar: AppBar(
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              statusBarColor: Color.fromARGB(255, 223, 223, 223),
+            ),
+            toolbarHeight: 70,
+            backgroundColor: const Color.fromARGB(255, 223, 223, 223),
+            elevation: 3,
+            title: InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileScreen(uid: widget.snap['uid']),
+                  ),
+                );
+              },
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 25,
+                    backgroundImage: NetworkImage(widget.snap['avtUrl']),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    widget.snap['name'],
+                    style: const TextStyle(color: primaryColor),
+                  )
+                ],
               ),
             ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.video_call,
-                color: themeColor,
-                size: 30,
-              ),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.info_rounded,
-                color: Colors.black,
-              ),
-            )
-          ],
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Color.fromARGB(255, 223, 223, 223),
+            iconTheme: const IconThemeData(color: primaryColor),
           ),
-          toolbarHeight: 70,
-          backgroundColor: const Color.fromARGB(255, 223, 223, 223),
-          elevation: 3,
-          title: InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ProfileScreen(uid: widget.snap['uid']),
-                ),
-              );
-            },
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundImage: NetworkImage(widget.snap['avtUrl']),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  widget.snap['name'],
-                  style: const TextStyle(color: primaryColor),
-                )
-              ],
-            ),
-          ),
-          iconTheme: const IconThemeData(color: primaryColor),
-        ),
 
-        body: Column(
-          children: [
-            // _isLoading
-            //      const Expanded(
-            //         child: Center(
-            //           child: CircularProgressIndicator(
-            //             color: themeColor,
-            //           ),
-            //         ),
-            //       )
-            //     :
-            Expanded(
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('chats')
-                    .doc(FirestoreFirebase().getDocumentId(widget.snap['uid']))
-                    .collection('messages')
-                    .orderBy('sent', descending: false)
-                    .snapshots(),
-                builder: ((context,
-                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                        snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: themeColor,
-                      ),
-                    );
-                  }
+          body: Column(
+            children: [
+              // _isLoading
+              //      const Expanded(
+              //         child: Center(
+              //           child: CircularProgressIndicator(
+              //             color: themeColor,
+              //           ),
+              //         ),
+              //       )
+              //     :
+              Expanded(
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('chats')
+                      .doc(
+                          FirestoreFirebase().getDocumentId(widget.snap['uid']))
+                      .collection('messages')
+                      .orderBy('sent', descending: false)
+                      .snapshots(),
+                  builder: ((context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: themeColor,
+                        ),
+                      );
+                    }
 
-                  return snapshot.data!.docs.isEmpty
-                      ? Center(
-                          child: _helloButton(
-                              widget.snap['uid'], widget.snap['name']),
-                        )
-                      : ListView.builder(
-                          controller: _scrollController,
-                          itemCount: snapshot.data!.docs.length,
-                          padding: const EdgeInsets.only(top: 10),
-                          physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return MessageCard(
+                    return snapshot.data!.docs.isEmpty
+                        ? Center(
+                            child: _helloButton(
+                                widget.snap['uid'], widget.snap['name']),
+                          )
+                        : ListView.builder(
+                            controller: _scrollController,
+                            itemCount: snapshot.data!.docs.length,
+                            padding: const EdgeInsets.only(top: 10),
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return MessageCard(
                                 snap: widget.snap,
                                 message: snapshot.data!.docs[index].data(),
-                                lastSendMessage: widget.lastSendMessage);
-                          },
-                        );
-                }),
+                              );
+                            },
+                          );
+                  }),
+                ),
               ),
-            ),
-            _chatInput()
-          ],
+              _chatInput(),
+
+              if (_showEmoji)
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 3,
+                  child: EmojiPicker(
+                    onBackspacePressed: () {},
+                    textEditingController: _messageController,
+                    config: Config(
+                      initCategory: Category.SMILEYS,
+                      columns: 8,
+                      emojiSizeMax: 32 * (Platform.isAndroid ? 1.30 : 1.0),
+                    ),
+                  ),
+                )
+            ],
+          ),
         ),
       ),
     );
@@ -206,6 +213,14 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: [
                     Expanded(
                         child: TextField(
+                      onTap: () {
+                        _scrollToBottom;
+                        if (_showEmoji) {
+                          setState(() {
+                            _showEmoji = !_showEmoji;
+                          });
+                        }
+                      },
                       controller: _messageController,
                       maxLines: null,
                       keyboardType: TextInputType.multiline,
@@ -214,17 +229,14 @@ class _ChatScreenState extends State<ChatScreen> {
                           border: InputBorder.none),
                     )),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        setState(() {
+                          _showEmoji = !_showEmoji;
+                        });
+                      },
                       icon: const Icon(
                         Icons.emoji_emotions,
-                        color: themeColor,
-                        size: 25,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.photo,
                         color: themeColor,
                         size: 25,
                       ),

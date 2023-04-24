@@ -11,13 +11,12 @@ import '../models/message.dart';
 class MessageCard extends StatefulWidget {
   final message;
   final snap;
-  final Message lastSendMessage;
-  const MessageCard(
-      {Key? key,
-      required this.message,
-      this.snap,
-      required this.lastSendMessage})
-      : super(key: key);
+  //final Message lastSendMessage;
+  const MessageCard({
+    Key? key,
+    required this.message,
+    this.snap,
+  }) : super(key: key);
 
   @override
   State<MessageCard> createState() => _MessageCardState();

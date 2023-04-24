@@ -19,35 +19,6 @@ class ChatUserCard extends StatefulWidget {
 
 class _ChatUserCardState extends State<ChatUserCard> {
   Message? _message;
-  Message? _message3;
-
-  // int count = 0;
-  // var getMes = {};
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   countMessageUnread();
-  // }
-
-  // countMessageUnread() async {
-  //   setState(() {});
-  //   try {
-  //     var unReadMessage = await FirebaseFirestore.instance
-  //         .collection('chats')
-  //         .doc(FirestoreFirebase().getDocumentId(widget.snap['uid']))
-  //         .collection('messages')
-  //         .where('read', isEqualTo: "")
-  //         .where('toId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-  //         .get();
-
-  //     count = unReadMessage.docs.length;
-  //     setState(() {});
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  //   setState(() {});
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -81,117 +52,97 @@ class _ChatUserCardState extends State<ChatUserCard> {
                         [];
 
                 int count = list2.length;
-                return StreamBuilder(
-                  stream: FirestoreFirebase()
-                      .getLastSendMessage(widget.snap['uid']),
-                  builder: ((context,
-                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                          snapshot3) {
-                    final data3 = snapshot3.data?.docs;
-                    final list3 = data3
-                            ?.map((e) => Message.fromJson(e.data()))
-                            .toList() ??
-                        [];
-                    if (list3.isNotEmpty) _message3 = list[0];
-
-                    return _message != null
-                        ? ListTile(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ChatScreen(
-                                      snap: widget.snap,
-                                      lastSendMessage: _message3),
-                                ),
-                              );
-                            },
-                            leading: CircleAvatar(
-                                radius: 30,
-                                backgroundImage:
-                                    NetworkImage(widget.snap['avtUrl'])),
-                            title: FirebaseAuth.instance.currentUser!.uid !=
-                                    widget.snap['uid']
-                                ? Text('${widget.snap['name']}')
-                                : const Text(
-                                    'Tôi',
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 38, 115, 177),
-                                        fontStyle: FontStyle.italic,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                            subtitle:
-                                //********* Nếu là tin nhắn mình gửi đi*************/
-                                _message!.fromId ==
-                                        FirebaseAuth.instance.currentUser!.uid
-                                    ? Row(
-                                        children: [
-                                          const Text('Bạn: '),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2,
-                                            child: Text(
-                                              _message!.msg,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ],
-                                      )
-
-                                    //********* Nếu là tin nhắn mình nhận được nhưng chưa đọc *************/
-                                    : _message!.read.isEmpty
-                                        ? Text(
-                                            _message!.msg,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          )
-
-                                        //********* Nếu là tin nhắn mình nhận được và đã đọc rồi */
-                                        : Text(
-                                            _message!.msg,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                            trailing: list2.isNotEmpty
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                return _message != null
+                    ? ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ChatScreen(snap: widget.snap),
+                            ),
+                          );
+                        },
+                        leading: CircleAvatar(
+                            radius: 30,
+                            backgroundImage:
+                                NetworkImage(widget.snap['avtUrl'])),
+                        title: FirebaseAuth.instance.currentUser!.uid !=
+                                widget.snap['uid']
+                            ? Text('${widget.snap['name']}')
+                            : const Text(
+                                'Tôi',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 38, 115, 177),
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                        subtitle:
+                            //********* Nếu là tin nhắn mình gửi đi*************/
+                            _message!.fromId ==
+                                    FirebaseAuth.instance.currentUser!.uid
+                                ? Row(
                                     children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5, vertical: 2),
-                                        decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius:
-                                                BorderRadius.circular(25)),
+                                      const Text('Bạn: '),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2,
                                         child: Text(
-                                          count.toString(),
-                                          //count.toString(),
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
+                                          _message!.msg,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                      ),
-                                      Text(
-                                        MyDate.formatDate(
-                                            context: context,
-                                            time: _message!.sent),
-                                        style: const TextStyle(
-                                            color: secondaryColor),
                                       ),
                                     ],
                                   )
-                                : Text(
+
+                                //********* Nếu là tin nhắn mình nhận được nhưng chưa đọc *************/
+                                : _message!.read.isEmpty
+                                    ? Text(
+                                        _message!.msg,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      )
+
+                                    //********* Nếu là tin nhắn mình nhận được và đã đọc rồi */
+                                    : Text(
+                                        _message!.msg,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                        trailing: list2.isNotEmpty
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 2),
+                                    decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius:
+                                            BorderRadius.circular(25)),
+                                    child: Text(
+                                      count.toString(),
+                                      //count.toString(),
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  Text(
                                     MyDate.formatDate(
                                         context: context, time: _message!.sent),
                                     style:
                                         const TextStyle(color: secondaryColor),
                                   ),
-                          )
-                        : const SizedBox();
-                  }),
-                );
+                                ],
+                              )
+                            : Text(
+                                MyDate.formatDate(
+                                    context: context, time: _message!.sent),
+                                style: const TextStyle(color: secondaryColor),
+                              ),
+                      )
+                    : const SizedBox();
               }),
             );
           }),
