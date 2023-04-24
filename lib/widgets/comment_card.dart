@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -6,15 +5,11 @@ import '../screen/profile_screen.dart';
 import '../utils/colors.dart';
 
 class CommentCard extends StatelessWidget {
-  final snap;
+  final dynamic snap;
   const CommentCard({Key? key, required this.snap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String name = '';
-
-    //var userData = FirebaseFirestore.instance.collection('users').doc(snap['uid']).get();
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Container(

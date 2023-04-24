@@ -1,16 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:socialnetwork/sources/firestore_firebase.dart';
 import 'package:socialnetwork/utils/colors.dart';
 import 'package:socialnetwork/utils/mydate.dart';
 
-import '../models/message.dart';
-
 class MessageCard extends StatefulWidget {
-  final message;
-  final snap;
+  final dynamic message;
+  final dynamic snap;
   //final Message lastSendMessage;
   const MessageCard({
     Key? key,

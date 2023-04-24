@@ -1,6 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:flutter/cupertino.dart';
-
 class Message {
   late final String msgId;
   late final String fromId;

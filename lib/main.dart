@@ -11,8 +11,6 @@ import 'package:socialnetwork/responsive/web_sreen.dart';
 import 'package:socialnetwork/screen/login_screen.dart';
 import 'package:socialnetwork/utils/colors.dart';
 
-import 'screen/signup_screen.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {

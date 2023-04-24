@@ -44,6 +44,7 @@ class _ListFollowScreenState extends State<ListFollowScreen> {
 
       //var getFollower = await FirebaseFirestore.instance.collection('users').
     } catch (e) {
+      // ignore: avoid_print
       print(e.toString());
     }
 

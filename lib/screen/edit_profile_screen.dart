@@ -1,11 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:socialnetwork/screen/my_profile_screen.dart';
 import 'package:socialnetwork/sources/firestore_firebase.dart';
 
 import '../utils/colors.dart';
@@ -67,6 +65,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       setState(() {});
     } catch (e) {
+      // ignore: avoid_print
       print(e.toString());
     }
     setState(() {

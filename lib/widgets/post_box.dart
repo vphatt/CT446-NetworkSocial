@@ -3,19 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
-import 'package:provider/provider.dart';
 import 'package:socialnetwork/screen/comment_screen.dart';
 import 'package:socialnetwork/sources/firestore_firebase.dart';
 import 'package:socialnetwork/utils/colors.dart';
 
-import '../provider/user_provider.dart';
-
-import 'package:socialnetwork/models/user.dart' as model;
-
 import '../screen/profile_screen.dart';
 
 class PostBox extends StatefulWidget {
-  final snap;
+  final dynamic snap;
   const PostBox({
     Key? key,
     required this.snap,
@@ -81,6 +76,7 @@ class _PostBoxState extends State<PostBox> {
       username = userData['username'];
       commentLength = snap.docs.length;
     } catch (e) {
+      // ignore: avoid_print
       print(e.toString());
     }
     setState(() {
@@ -89,16 +85,8 @@ class _PostBoxState extends State<PostBox> {
     });
   }
 
-// Future<bool> checkMyPost(uid) {
-//   uid
-// return
-//   }
-
   @override
   Widget build(BuildContext context) {
-    // double height = MediaQuery.of(context).size.height;
-    // double width = MediaQuery.of(context).size.width;
-    //model.User user = Provider.of<UserProvider>(context).getUser;
     return Container(
         //color: Colors.blue,
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -280,16 +268,6 @@ class _PostBoxState extends State<PostBox> {
                 const SizedBox(
                   width: 15,
                 ),
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.share,
-                          color: primaryColor,
-                        )),
-                  ],
-                ),
                 Expanded(
                   child: Align(
                       alignment: Alignment.bottomRight,
@@ -308,16 +286,6 @@ class _PostBoxState extends State<PostBox> {
                 ),
               ],
             ),
-
-            //Nút xem tất cả bình luận
-
-            // const SizedBox(
-            //   height: 15,
-            // ),
-            // Container(
-            //   height: 10,
-            //   color: const Color.fromARGB(255, 224, 224, 224),
-            // )
           ],
         ));
   }

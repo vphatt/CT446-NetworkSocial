@@ -1,9 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:socialnetwork/screen/signup_screen.dart';
 import 'package:socialnetwork/sources/auth_firebase.dart';
-import 'package:socialnetwork/utils/colors.dart';
+
 import 'package:socialnetwork/utils/tools.dart';
 import 'package:socialnetwork/widgets/text_field_input.dart';
 
@@ -93,7 +91,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Colors.white,
                         ),
                       )
-                    : const Text("ĐĂNG NHẬP"),
+                    : const Text(
+                        "ĐĂNG NHẬP",
+                        style: TextStyle(color: Colors.white),
+                      ),
               ),
             ),
             const SizedBox(
@@ -139,6 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text, password: _passwordController.text);
 
     if (res == 'success') {
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const ResponsiveScreen(

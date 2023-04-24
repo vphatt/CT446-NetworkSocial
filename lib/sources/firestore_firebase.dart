@@ -2,8 +2,6 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:socialnetwork/models/message.dart';
 import 'package:socialnetwork/sources/storage_firebase.dart';
 import 'package:uuid/uuid.dart';
@@ -12,7 +10,6 @@ import '../models/post.dart';
 
 class FirestoreFirebase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //ĐĂNG ẢNH
   Future<String> uploadPost(String caption, Uint8List file, String uid,
@@ -48,6 +45,7 @@ class FirestoreFirebase {
     try {
       await _firestore.collection('posts').doc(postId).delete();
     } catch (e) {
+      // ignore: avoid_print
       print(e.toString());
     }
   }
@@ -72,9 +70,11 @@ class FirestoreFirebase {
           'datePublish': DateTime.now(),
         });
       } else {
+        // ignore: avoid_print
         print('Bình luận trống!');
       }
     } catch (e) {
+      // ignore: avoid_print
       print(e.toString());
     }
   }
@@ -107,6 +107,7 @@ class FirestoreFirebase {
         });
       }
     } catch (e) {
+      // ignore: avoid_print
       print(e.toString());
     }
   }
@@ -124,10 +125,11 @@ class FirestoreFirebase {
         String avtUrl = await StorageFirebase()
             .uploadImageToStorage('avatarProfile', avt, false);
 
-        await _firestore
-            .collection('users')
-            .doc(uid)
-            .update({'username': username, 'name': name});
+        await _firestore.collection('users').doc(uid).update({
+          'avtUrl': avtUrl,
+          'username': username,
+          'name': name,
+        });
       } else {
         await _firestore
             .collection('users')

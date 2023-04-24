@@ -6,10 +6,8 @@ import 'package:socialnetwork/screen/edit_profile_screen.dart';
 import 'package:socialnetwork/screen/login_screen.dart';
 import 'package:socialnetwork/screen/post_detail_screen.dart';
 import 'package:socialnetwork/sources/auth_firebase.dart';
-import 'package:socialnetwork/sources/firestore_firebase.dart';
 import 'package:socialnetwork/utils/tools.dart';
 import 'package:socialnetwork/widgets/list_follow_screen.dart';
-import 'package:socialnetwork/widgets/post_box.dart';
 
 import '../utils/colors.dart';
 import '../widgets/follow_button.dart';
@@ -113,6 +111,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                       ),
                                       onPressed: () async {
                                         await AuthFirebase().signOut();
+                                        // ignore: use_build_context_synchronously
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
                                             builder: (context) =>

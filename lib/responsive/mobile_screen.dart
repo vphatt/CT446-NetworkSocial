@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:socialnetwork/provider/user_provider.dart';
@@ -30,36 +28,6 @@ class _MobileScreenState extends State<MobileScreen> {
         physics: const NeverScrollableScrollPhysics(),
         children: homeScreenItems,
       ),
-      // bottomNavigationBar: CupertinoTabBar(
-      //   backgroundColor: mobileBackgroundColor,
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home, color: _selectedIndex == 0),
-      //       label: 'Trang Chủ',
-      //       backgroundColor: primaryColor,
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.search),
-      //       label: 'Tìm Kiếm',
-      //       backgroundColor: primaryColor,
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.add),
-      //       label: 'Bài Viết',
-      //       backgroundColor: primaryColor,
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.notifications),
-      //       label: 'Thông Báo',
-      //       backgroundColor: primaryColor,
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: 'Profile',
-      //       backgroundColor: primaryColor,
-      //     ),
-      //   ],
-      // ),
       bottomNavigationBar: FlashyTabBar(
         backgroundColor: appBarColor,
         iconSize: 30,
@@ -77,11 +45,6 @@ class _MobileScreenState extends State<MobileScreen> {
               title: const Text('Tìm Kiếm'),
               activeColor: themeColor,
               inactiveColor: primaryColor),
-          // FlashyTabBarItem(
-          //     icon: const Icon(Icons.add_circle),
-          //     title: const Text('Bài Viết'),
-          //     activeColor: themeColor,
-          //     inactiveColor: primaryColor),
           FlashyTabBarItem(
               icon: const Icon(Icons.message),
               title: const Text('Trò Chuyện'),

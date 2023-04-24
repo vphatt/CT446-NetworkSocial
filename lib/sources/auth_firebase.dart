@@ -1,9 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:socialnetwork/sources/storage_firebase.dart';
 import 'package:socialnetwork/models/user.dart' as model;
@@ -39,8 +36,6 @@ class AuthFirebase {
           ) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-
-        print(cred.user!.uid);
 
         //Phương thức thêm avt lênn firebase
         String avtUrl = await StorageFirebase()

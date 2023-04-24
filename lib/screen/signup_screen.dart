@@ -1,10 +1,8 @@
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socialnetwork/sources/auth_firebase.dart';
-import 'package:socialnetwork/utils/colors.dart';
 import 'package:socialnetwork/utils/tools.dart';
 import 'package:socialnetwork/widgets/text_field_input.dart';
 
@@ -150,7 +148,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     ? const Center(
                         child: CircularProgressIndicator(color: Colors.white),
                       )
-                    : const Text("ĐĂNG KÝ"),
+                    : const Text("ĐĂNG KÝ",
+                        style: TextStyle(color: Colors.white)),
               ),
             ),
             const SizedBox(
@@ -203,8 +202,10 @@ class _SignupScreenState extends State<SignupScreen> {
       _isLoading = false;
     });
     if (res != 'success') {
+      // ignore: use_build_context_synchronously
       showSnackBar(res, context);
     } else {
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const ResponsiveScreen(

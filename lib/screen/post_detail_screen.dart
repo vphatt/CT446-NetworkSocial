@@ -5,7 +5,7 @@ import 'package:socialnetwork/widgets/post_box.dart';
 import '../utils/colors.dart';
 
 class PostDetailScreen extends StatefulWidget {
-  final snap;
+  final dynamic snap;
   const PostDetailScreen({Key? key, required this.snap}) : super(key: key);
 
   @override

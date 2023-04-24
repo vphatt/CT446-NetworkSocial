@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:comment_box/comment/comment.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:socialnetwork/sources/firestore_firebase.dart';
@@ -13,7 +10,7 @@ import '../provider/user_provider.dart';
 import '../widgets/comment_card.dart';
 
 class CommentScreen extends StatefulWidget {
-  final postId;
+  final dynamic postId;
   const CommentScreen({
     Key? key,
     required this.postId,
@@ -54,19 +51,10 @@ class _CommentScreenState extends State<CommentScreen> {
           withBorder: true,
           commentController: _commentController,
           sendButtonMethod: () async {
-            // print(commentController.text);
             if (formKey.currentState!.validate()) {
               FirestoreFirebase().postComment(widget.postId,
                   _commentController.text, user.uid, user.name, user.avtUrl);
-              // setState(() {
-              //   var value = {
-              //     'name': user.name,
-              //     'pic': user.avtUrl,
-              //     'message': _commentController.text,
-              //     'date': '2021-01-01 12:00:00'
-              //   };
-              //   //comments_on_post.insert(0, value);
-              // });
+
               _commentController.clear();
               FocusScope.of(context).unfocus();
             }
@@ -81,7 +69,7 @@ class _CommentScreenState extends State<CommentScreen> {
                 .collection('posts')
                 .doc(widget.postId)
                 .collection('comments')
-                .orderBy('datePublish', descending: true)
+                .orderBy('datePublish', descending: false)
                 .snapshots(),
             builder: (context,
                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -92,14 +80,14 @@ class _CommentScreenState extends State<CommentScreen> {
               }
 
               return ListView.builder(
+                physics: const BouncingScrollPhysics(),
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) => CommentCard(
                   snap: snapshot.data!.docs[index],
                 ),
               );
             },
-          ) //commentChild(comments_on_post),
-          ),
+          )),
     );
   }
 }

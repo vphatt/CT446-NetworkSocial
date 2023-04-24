@@ -7,8 +7,10 @@ class Post {
   final String avt;
   final String postId;
   final String caption;
+  // ignore: prefer_typing_uninitialized_variables
   final datePublish;
   final String postUrl;
+  // ignore: prefer_typing_uninitialized_variables
   final like;
 
   const Post(

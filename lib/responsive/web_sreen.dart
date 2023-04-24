@@ -10,6 +10,6 @@ class WebScreen extends StatefulWidget {
 class _WebScreenState extends State<WebScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("WEB SCREEN")));
+    return const Scaffold(body: Center(child: Text("WEB SCREEN")));
   }
 }

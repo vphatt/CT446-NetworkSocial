@@ -9,7 +9,7 @@ import '../models/message.dart';
 import '../utils/mydate.dart';
 
 class ChatUserCard extends StatefulWidget {
-  final snap;
+  final dynamic snap;
   //final message;
   const ChatUserCard({Key? key, required this.snap}) : super(key: key);
 

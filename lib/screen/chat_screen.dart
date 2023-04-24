@@ -11,27 +11,21 @@ import 'package:socialnetwork/utils/colors.dart';
 import 'package:socialnetwork/widgets/message_card.dart';
 
 class ChatScreen extends StatefulWidget {
-  final snap;
-  final lastSendMessage;
-  const ChatScreen({Key? key, required this.snap, this.lastSendMessage})
-      : super(key: key);
+  final dynamic snap;
+  const ChatScreen({Key? key, required this.snap}) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  //bool _isLoading = false;
-  //List<Message> _list = [];
-
   //Giá trị true hoặc false để xác định hiện hoặc ẩn emoji
   bool _showEmoji = false;
 
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  bool _firstAutoscrollExecuted = false;
-  bool _shouldAutoscroll = false;
 
+//Các hàm xử lý Cuộc đến cuối
   _scrollToBottom() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
@@ -41,15 +35,10 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _scrollListener() {
-    _firstAutoscrollExecuted = true;
-
     if (_scrollController.hasClients &&
         _scrollController.position.pixels ==
             _scrollController.position.maxScrollExtent) {
-      _shouldAutoscroll = true;
-    } else {
-      _shouldAutoscroll = false;
-    }
+    } else {}
   }
 
   @override
@@ -85,10 +74,6 @@ class _ChatScreenState extends State<ChatScreen> {
         },
         child: Scaffold(
           backgroundColor: const Color.fromARGB(255, 236, 236, 236),
-          // appBar: AppBar(
-          //   leading: CircleAvatar(
-          //       radius: 30, backgroundImage: NetworkImage(widget.snap['avtUrl'])),
-          // ),
           appBar: AppBar(
             systemOverlayStyle: const SystemUiOverlayStyle(
               statusBarColor: Color.fromARGB(255, 223, 223, 223),
@@ -123,18 +108,8 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             iconTheme: const IconThemeData(color: primaryColor),
           ),
-
           body: Column(
             children: [
-              // _isLoading
-              //      const Expanded(
-              //         child: Center(
-              //           child: CircularProgressIndicator(
-              //             color: themeColor,
-              //           ),
-              //         ),
-              //       )
-              //     :
               Expanded(
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance
@@ -176,7 +151,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
               _chatInput(),
-
               if (_showEmoji)
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 3,
@@ -270,6 +244,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+//Nút Hello để gửi nhanh tin nhắn đầu tiên
   Widget _helloButton(String uid, String name) {
     return InkWell(
       onTap: () {
@@ -282,7 +257,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-            child: Container(
+            child: SizedBox(
               height: 80,
               child: Padding(
                 padding: const EdgeInsets.all(20),
