@@ -227,101 +227,74 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             },
                           )
                         : isFollowing
-                            ? isFriend
-                                ? Row(
-                                    children: [
-                                      FollowButton(
-                                        text: 'Bạn bè',
-                                        backgroundColor: mobileBackgroundColor,
-                                        borderColor: primaryColor,
-                                        textColor: primaryColor,
-                                        function: () async {
-                                          await FirestoreFirebase().followUser(
-                                              FirebaseAuth
-                                                  .instance.currentUser!.uid,
-                                              userData['uid']);
-                                          setState(() {
-                                            isFollowing = false;
-                                            followersLength--;
-                                          });
-                                        },
-                                      ),
-                                      SizedBox(
-                                        width: 100,
-                                        height: 50,
-                                        child: TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ChatScreen(
-                                                            snap: userData)));
+                            ? Row(
+                                children: [
+                                  isFriend
+                                      ? FollowButton(
+                                          text: 'Bạn bè',
+                                          backgroundColor:
+                                              mobileBackgroundColor,
+                                          borderColor: primaryColor,
+                                          textColor: primaryColor,
+                                          function: () async {
+                                            await FirestoreFirebase()
+                                                .followUser(
+                                                    FirebaseAuth.instance
+                                                        .currentUser!.uid,
+                                                    userData['uid']);
+                                            setState(() {
+                                              isFollowing = false;
+                                              followersLength--;
+                                            });
                                           },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.black,
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            alignment: Alignment.center,
-                                            child: const Text(
-                                              'Nhắn tin',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 15),
-                                            ),
-                                          ),
+                                        )
+                                      : FollowButton(
+                                          text: 'Đang theo dõi',
+                                          backgroundColor:
+                                              mobileBackgroundColor,
+                                          borderColor: primaryColor,
+                                          textColor: primaryColor,
+                                          function: () async {
+                                            await FirestoreFirebase()
+                                                .followUser(
+                                                    FirebaseAuth.instance
+                                                        .currentUser!.uid,
+                                                    userData['uid']);
+                                            setState(() {
+                                              isFollowing = false;
+                                              followersLength--;
+                                            });
+                                          },
+                                        ),
+                                  SizedBox(
+                                    width: 100,
+                                    height: 50,
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ChatScreen(
+                                                        snap: userData)));
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Nhắn tin',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15),
                                         ),
                                       ),
-                                    ],
-                                  )
-                                : Row(
-                                    children: [
-                                      FollowButton(
-                                        text: 'Đang theo dõi',
-                                        backgroundColor: mobileBackgroundColor,
-                                        borderColor: primaryColor,
-                                        textColor: primaryColor,
-                                        function: () async {
-                                          await FirestoreFirebase().followUser(
-                                              FirebaseAuth
-                                                  .instance.currentUser!.uid,
-                                              userData['uid']);
-                                          setState(() {
-                                            isFollowing = false;
-                                            followersLength--;
-                                          });
-                                        },
-                                      ),
-                                      SizedBox(
-                                        width: 100,
-                                        height: 50,
-                                        child: TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ChatScreen(
-                                                            snap: userData)));
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.black,
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            alignment: Alignment.center,
-                                            child: const Text(
-                                              'Nhắn tin',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 15),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
+                                    ),
+                                  ),
+                                ],
+                              )
                             : FollowButton(
                                 text: 'Theo dõi',
                                 backgroundColor: themeColor,

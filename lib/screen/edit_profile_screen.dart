@@ -187,14 +187,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               _usernameController.text,
                               _nameController.text,
                               _image != null ? _image! : userData['avtUrl']),
-                          // async {
-                          //   await
-                          //   FirestoreFirebase().updateInfo(
-                          //       userData['uid'],
-                          //       _usernameController.text,
-                          //       _nameController.text,
-                          //       _image!);
-                          // },
                           child: Container(
                             height: 60,
                             width: 150,
